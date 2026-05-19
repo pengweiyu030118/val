@@ -91,30 +91,39 @@ export function calculateResult(answers: Answer[]): TestResult {
   };
 }
 
-// 编码结果用于分享 (浏览器兼容的 base64url)
+// base64url 编码 (兼容所有环境)
+function toBase64Url(str: string): string {
+  // 使用 TextEncoder + 标准 base64 转 base64url
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const base64 = btoa(binary);
+  return base64.replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+}
+
+// base64url 解码 (兼容所有环境)
+function fromBase64Url(encoded: string): string {
+  const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+// 编码结果用于分享
 export function encodeResult(answers: Answer[]): string {
   const str = answers.map((a) => `${a.questionId}:${a.optionId}`).join(",");
-  // 使用 btoa 进行 base64 编码，然后转为 base64url 格式
-  try {
-    const base64 = btoa(unescape(encodeURIComponent(str)));
-    return base64.replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
-  } catch {
-    // fallback: 直接使用 encodeURIComponent
-    return encodeURIComponent(str);
-  }
+  return toBase64Url(str);
 }
 
 // 解码分享结果
 export function decodeResult(encoded: string): Answer[] | null {
   try {
-    let str: string;
-    // 尝试 base64url 解码
-    if (encoded.includes("%")) {
-      str = decodeURIComponent(encoded);
-    } else {
-      const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
-      str = decodeURIComponent(escape(atob(base64)));
-    }
+    const str = fromBase64Url(encoded);
     return str.split(",").map((pair) => {
       const [questionId, optionId] = pair.split(":");
       return { questionId: parseInt(questionId), optionId };

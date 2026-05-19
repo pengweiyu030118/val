@@ -10,7 +10,6 @@ import ShareButton from "@/components/ShareButton";
 import ResultCard from "@/components/ResultCard";
 import { calculateResult, decodeResult } from "@/utils/calculate";
 import { useSound } from "@/hooks/useSound";
-import { Answer } from "@/types";
 
 const RadarChart = dynamic(() => import("@/components/RadarChart"), { ssr: false });
 
