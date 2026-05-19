@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx @opennextjs/cloudflare build",
     "start": "next start",
     "lint": "next lint",
-    "cloudflare:build": "npx @opennextjs/cloudflare build"
+    "next:build": "next build"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.3",
