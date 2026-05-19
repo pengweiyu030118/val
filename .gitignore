@@ -30,10 +30,6 @@ yarn-error.log*
 
 # cloudflare
 .open-next/
-wrangler.toml
-wrangler.json
-wrangler.jsonc
-.node_modules/
 
 # typescript
 *.tsbuildinfo
