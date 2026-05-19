@@ -1,6 +1,3 @@
-// @ts-check
-import { defineCloudflareConfig } from "@opennextjs/cloudflare/config";
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 
-export default defineCloudflareConfig({
-  // Next.js 14 compatibility
-});
+export default defineCloudflareConfig({});
